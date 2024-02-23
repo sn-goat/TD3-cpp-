@@ -21,10 +21,11 @@ public:
     Film** trouverElements();
 
 
-    void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur) const;
+    //void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur) const;
+    friend ostream& operator<< (ostream& o, const ListeFilms& listeFilms);
     void ajouterFilmListeFilms(ListeFilms& listeFilms, Film* film);
     void enleverFilmListeFilms(ListeFilms& listeFilms, Film* film);
-    void afficherListeFilms(const ListeFilms& listeFilms) const;
+    //void afficherListeFilms(const ListeFilms& listeFilms) const;
     void detruireListeFilms(ListeFilms& listeFilms);
     void detruireFilm(Film* film, ListeFilms& listeFilms);
     ListeFilms creerListe(const string& nomFichier);
@@ -69,7 +70,7 @@ struct Acteur
     string nom;
     int anneeNaissance = 0;
     char sexe;
-    ListeFilms joueDans;
+    //ListeFilms joueDans;
 };
 //struct ListeActeurs {
 //    int capacite, nElements;
@@ -82,4 +83,3 @@ struct Film
     int anneeSortie, recette; // Année de sortie et recette globale du film en millions de dollars
     ListeActeurs acteurs;
 };
-
