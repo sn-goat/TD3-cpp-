@@ -20,7 +20,8 @@ public:
     Film** trouverElements() const;
     Film** trouverElements();
 
-
+    friend ostream& operator<< (ostream& o, const Film& film);
+    
     //void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur) const;
     friend ostream& operator<< (ostream& o, const ListeFilms& listeFilms);
     void ajouterFilmListeFilms(ListeFilms& listeFilms, Film* film);
