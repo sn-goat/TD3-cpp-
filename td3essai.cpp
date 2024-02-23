@@ -8,7 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <span>
-
+#include <sstream>
 #include "include/cppitertools/range.hpp"
 
 
@@ -33,10 +33,11 @@ T lireType(istream& fichier)
     assert(!fichier.fail());
     return valeur;
 }
+
 #define erreurFataleAssert(message) assert(false&&(message)),terminate()
 
 //DECLARATION DES FONCTIONS NE FAISANT PAS PARTIE DE LA CLASSE
-void afficherActeur(const Acteur& acteur);
+void afficherActeur(ostream& o, const Acteur& acteur);
 Film* lireFilm(istream& fichier, ListeFilms& listeFilms);
 shared_ptr<Acteur> lireActeur(istream& fichier, const  ListeFilms& listeFilms);
 shared_ptr<Acteur> trouverActeurListeFilms(const ListeFilms& listeFilms, const string& nomActeur);
@@ -216,20 +217,23 @@ void ListeFilms::detruireListeFilms(ListeFilms& listeFilms) {
 }
 
 
-void ListeFilms::afficherListeFilms(const ListeFilms& listeFilms) const {
-    static const string ligneDeSeparation = "----------------------------------------\n";
-    cout << ligneDeSeparation;
 
+ostream& operator<< (ostream& o, const ListeFilms& listeFilms) {
+    static const string ligneDeSeparation = "----------------------------------------\n";
+    o << ligneDeSeparation;
     for (Film* film : span(listeFilms.elements_, listeFilms.nElements_)) {
-        cout << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << ", Acteurs: " << endl;
+        o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << ", Acteurs: " << endl;
         for (int i : range(film->acteurs.trouverNElements())) {
-            afficherActeur(*film->acteurs.trouverElements()[i]);
+                afficherActeur(o ,*film->acteurs.trouverElements()[i]);
         }
 
-        cout << ligneDeSeparation;
-    }
-}
+        o << ligneDeSeparation;
 
+    }
+    return o;
+
+}
+/*
 void ListeFilms::afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur) const {
     const shared_ptr<Acteur>acteur = trouverActeurListeFilms(listeFilms, nomActeur);
     if (acteur == nullptr) {
@@ -239,7 +243,7 @@ void ListeFilms::afficherFilmographieActeur(const ListeFilms& listeFilms, const 
         afficherListeFilms(acteur->joueDans);
     }
 }
-
+*/
 void ListeActeurs::creerListeActeurs() {
     elements_ = make_unique<shared_ptr<Acteur>[]>(capacite_);
     /*for (int i: range(capacite_)) {
@@ -258,8 +262,12 @@ void ListeActeurs::ajouterActeurListeActeur(shared_ptr<Acteur> acteur) {
 
 
 //////////////////////////////////////////////  FONCTIONS DES STRUCTURES ////////////////////////////////////////////////////////////////////
-void afficherActeur(const Acteur& acteur) {
-    cout << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
+void afficherActeur(ostream& o, const Acteur& acteur) {
+    o << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
+}
+
+ostream& operator<< (ostream& o, const Film* film) {
+    return o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << "M$"<< endl;
 }
 
 Film* lireFilm(istream& fichier, ListeFilms& listeFilms) {
@@ -275,7 +283,7 @@ Film* lireFilm(istream& fichier, ListeFilms& listeFilms) {
     for (int i : range(newFilm->acteurs.trouverCapacite())) {
         shared_ptr<Acteur> ptrActeur = lireActeur(fichier, listeFilms);
         newFilm->acteurs.ajouterActeurListeActeur(ptrActeur);
-        listeFilms.ajouterFilmListeFilms(ptrActeur->joueDans, newFilm);
+        //listeFilms.ajouterFilmListeFilms(ptrActeur->joueDans, newFilm);
     }
 
     return newFilm;  // Retournez le pointeur du nouvel objet Film.
@@ -330,11 +338,10 @@ int main()
     cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
     //TODO: Afficher le premier film de la liste.  Devrait être Alien.
     Film* film = listeFilms.trouverElements()[0];
-    cout << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << endl;
-
+    cout << film;
     cout << ligneDeSeparation << "Les films sont:" << endl;
     //TODO: Afficher la liste des films.  Il devrait y en avoir 7.
-    listeFilms.afficherListeFilms(listeFilms);
+    cout << listeFilms;
 
     //TODO: Modifier l'année de naissance de Benedict Cumberbatch pour être 1976 (elle était 0 dans les données lues du fichier).  Vous ne pouvez pas supposer l'ordre des films et des acteurs dans les listes, il faut y aller par son nom.
     shared_ptr<Acteur>benedictCumberbatch = trouverActeurListeFilms(listeFilms, "Benedict Cumberbatch");
@@ -346,22 +353,38 @@ int main()
 
     //TODO: Afficher la liste des films où Benedict Cumberbatch joue.  Il devrait y avoir Le Hobbit et Le jeu de l'imitation.
 
-    listeFilms.afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
+    //listeFilms.afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
 
     //TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement" (par ce que font vos fonctions) détruire les acteurs Tom Skerritt et John Hurt, mais pas Sigourney Weaver puisqu'elle joue aussi dans Avatar.
     listeFilms.detruireFilm(listeFilms.trouverElements()[0], listeFilms);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
     //TODO: Afficher la liste des films.
-    listeFilms.afficherListeFilms(listeFilms);
+    cout << listeFilms;
 
     //TODO: Faire les appels qui manquent pour avoir 0% de lignes non exécutées dans le programme
     // (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new"
     // et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes du programmes
     // qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
 
+    //TODO: Changer la fonction afficherFilm pour qu’on puisse afficher comme ceci:
+    // cout << unFilm << unAutreFilm; Et que ça fonctionne si on veut l’afficher sur
+    // autre chose que cout, par exemple dans un ostringstream (dans <sstream> ) ou dans un fichier avec ofstream
+    cout << ligneDeSeparation << "Test de l'operateur '<<':" << endl;
+    ostringstream tamponStringStream;
+
+    tamponStringStream << listeFilms.trouverElements()[5];
+    string filmEnString = tamponStringStream.str();
+
+    cout << filmEnString << listeFilms.trouverElements()[3];
+
+    ofstream fichier("films.txt");
+
+    fichier << filmEnString << listeFilms;
+
     //TODO: Détruire tout avant de terminer le programme.
     // La bibliothèque de verification_allocation devrait afficher "Aucune fuite detectee."
     // a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque
     // des delete.
+    cout << ligneDeSeparation << "Destruction de listeFilms: " << endl;
     listeFilms.detruireListeFilms(listeFilms);
 }
