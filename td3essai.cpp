@@ -269,10 +269,26 @@ void ListeActeurs::ajouterActeurListeActeur(shared_ptr<Acteur> acteur) {
 //}
 
 ostream& operator<< (ostream& o, const Film* film) {
-    return o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << "M$" << endl;
+    static const string ligneDeSeparation = "----------------------------------------\n";
+    o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << "M$" << " Acteurs:  " << endl;
+    for (int i : range(film->acteurs.trouverNElements())) {
+    
+        afficherActeur(o, *film->acteurs.trouverElements()[i]);
+    }
+    o << ligneDeSeparation ;
+    return o;
+}
+ostream& operator<< (ostream& o, const Film& film) {
+    static const string ligneDeSeparation = "----------------------------------------\n";
+    o << "  " << film.titre << ", Realise par " << film.realisateur << ", sorti en " << film.anneeSortie << ", recettes : " << film.recette << "M$" << " Acteurs:  " << endl;
+    for (int i : range(film.acteurs.trouverNElements())) {
+
+        afficherActeur(o, *film.acteurs.trouverElements()[i]);
+    }
+    o << ligneDeSeparation;
+    return o;
     
 }
-
 Film* lireFilm(istream& fichier, ListeFilms& listeFilms) {
     Film* newFilm = new Film();  // Allouez dynamiquement un nouvel objet Film.
 
@@ -356,14 +372,39 @@ int main()
     cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
 
     //TODO: Afficher la liste des films où Benedict Cumberbatch joue.  Il devrait y avoir Le Hobbit et Le jeu de l'imitation.
-
+    
     //listeFilms.afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
+    //skylien
+    // 1. Film skylien = listeFilms[0]; ou Film skylien = *listeFilms[0]; selon ce qui fait du sens.
+    Film skylien = *listeFilms.trouverElements()[0]; // ou Film* skylien = *listeFilms.trouverElements();
+
+    // 2. Changer le titre du film skylien pour "Skylien".
+    skylien.titre = "Skylien";
+
+    // 3. Changer le premier acteur du film skylien pour le premier acteur de listeFilms[1].
+    Film secondFilm = *listeFilms.trouverElements()[1];
+    skylien.acteurs.trouverElements()[0] = secondFilm.acteurs.trouverElements()[0];
+
+    // 4. Changer le nom du premier acteur de skylien pour "Daniel Wroughton Craig".
+    skylien.acteurs.trouverElements()[0]->nom = "Daniel Wroughton Craig";
+
+    // 5. Afficher skylien, listeFilms[0] et listeFilms[1].
+    cout << "Affichage de skylien:" << endl;
+    cout << skylien;
+
+    cout << "Affichage de listeFilms[0]:" << endl;
+    cout << listeFilms.trouverElements()[0];
+
+    cout << "Affichage de listeFilms[1]:" << endl;
+    cout << listeFilms.trouverElements()[1];
 
     //TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement" (par ce que font vos fonctions) détruire les acteurs Tom Skerritt et John Hurt, mais pas Sigourney Weaver puisqu'elle joue aussi dans Avatar.
     listeFilms.detruireFilm(listeFilms.trouverElements()[0], listeFilms);
     cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
     //TODO: Afficher la liste des films.
     cout << listeFilms;
+
+    
 
     //TODO: Faire les appels qui manquent pour avoir 0% de lignes non exécutées dans le programme
     // (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new"
