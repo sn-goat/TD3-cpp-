@@ -42,7 +42,7 @@ public:
     ListeActeurs();
     ListeActeurs(int capacite);
 
-    ListeActeurs(ListeActeurs&& listeActeurs);
+    ListeActeurs(const ListeActeurs& listeActeurs);
     ListeActeurs& operator=(ListeActeurs&& listeActeurs);
 
     ~ListeActeurs();
@@ -51,7 +51,7 @@ public:
     int trouverCapacite() const;
     shared_ptr<Acteur>* trouverElements() const;
 
-    void definirCapcite(int capacite);
+    //void definirCapcite(int capacite);
     void creerListeActeurs();
     void ajouterActeurListeActeur(shared_ptr<Acteur> acteur);
 
