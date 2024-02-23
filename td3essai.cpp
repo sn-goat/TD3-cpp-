@@ -154,6 +154,7 @@ void ListeFilms::ajouterFilmListeFilms(ListeFilms& listeFilms, Film* film) {
         listeFilms.capacite_ = nouvelleCapacite;
     }
     listeFilms.elements_[listeFilms.nElements_] = film;
+    cout << "Nom du film ajouté: " << film->titre << endl;
     listeFilms.nElements_++;
 }
 
@@ -203,7 +204,7 @@ ListeFilms ListeFilms::creerListe(const string& nomFichier) {
 
 void ListeFilms::detruireFilm(Film* film, ListeFilms& listeFilms) {
     enleverFilmListeFilms(listeFilms, film);
-
+    cout << "Destruction Film " << film->titre << endl;
     // Supprimer le film une fois que les acteurs associés ont été traités.
     delete film;
 }
@@ -212,17 +213,20 @@ void ListeFilms::detruireListeFilms(ListeFilms& listeFilms) {
     for (int index : range(0, listeFilms.nElements_)) {
         index = 0;
         detruireFilm(listeFilms.elements_[index], listeFilms);
+        
     }
     delete[] listeFilms.elements_;
 }
 
-
+void afficherActeur(ostream& o, const Acteur& acteur) {
+    o << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
+}
 
 ostream& operator<< (ostream& o, const ListeFilms& listeFilms) {
     static const string ligneDeSeparation = "----------------------------------------\n";
     o << ligneDeSeparation;
     for (Film* film : span(listeFilms.elements_, listeFilms.nElements_)) {
-        o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << ", Acteurs: " << endl;
+        o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette <<"M$"<< ", Acteurs: " << endl;
         for (int i : range(film->acteurs.trouverNElements())) {
                 afficherActeur(o ,*film->acteurs.trouverElements()[i]);
         }
@@ -262,12 +266,13 @@ void ListeActeurs::ajouterActeurListeActeur(shared_ptr<Acteur> acteur) {
 
 
 //////////////////////////////////////////////  FONCTIONS DES STRUCTURES ////////////////////////////////////////////////////////////////////
-void afficherActeur(ostream& o, const Acteur& acteur) {
-    o << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
-}
+//void afficherActeur(ostream& o, const Acteur& acteur) {
+//    o << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
+//}
 
 ostream& operator<< (ostream& o, const Film* film) {
-    return o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << "M$"<< endl;
+    return o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << "M$" << endl;
+    
 }
 
 Film* lireFilm(istream& fichier, ListeFilms& listeFilms) {
@@ -339,6 +344,7 @@ int main()
     //TODO: Afficher le premier film de la liste.  Devrait être Alien.
     Film* film = listeFilms.trouverElements()[0];
     cout << film;
+    
     cout << ligneDeSeparation << "Les films sont:" << endl;
     //TODO: Afficher la liste des films.  Il devrait y en avoir 7.
     cout << listeFilms;
