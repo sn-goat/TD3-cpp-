@@ -93,7 +93,7 @@ ListeActeurs::ListeActeurs()
     nElements_(0),
     elements_(nullptr) {}
 
-ListeActeurs::ListeActeurs(ListeActeurs&& listeActeurs)
+ListeActeurs::ListeActeurs(const ListeActeurs& listeActeurs)
     : capacite_(listeActeurs.capacite_),
     nElements_(listeActeurs.nElements_)
 {
@@ -176,8 +176,6 @@ ListeFilms ListeFilms::creerListe(const string& nomFichier) {
         cerr << "Erreur : Impossible d'ouvrir le fichier " << nomFichier << endl;
         return ListeFilms();
     }
-
-    cout << "Chemin du fichier : " << nomFichier << endl;
     try {
         fichier.exceptions(ios::failbit);
         // Code susceptible de lever une exception
@@ -254,9 +252,9 @@ void ListeActeurs::creerListeActeurs() {
         elements_[i] = nullptr;
     }*/
 }
-void ListeActeurs::definirCapcite(int capacite) {
-    capacite_ = capacite;
-}
+//void ListeActeurs::definirCapcite(int capacite) {
+//    capacite_ = capacite;
+//}
 void ListeActeurs::ajouterActeurListeActeur(shared_ptr<Acteur> acteur) {
     elements_[nElements_++] = acteur;
 
