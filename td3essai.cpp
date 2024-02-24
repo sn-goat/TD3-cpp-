@@ -216,6 +216,9 @@ void ListeFilms::detruireListeFilms(ListeFilms& listeFilms) {
     delete[] listeFilms.elements_;
 }
 
+template<typename PredicatUniaire>
+    auto trouverFilm(const PredicatUniaire& critere);
+
 void afficherActeur(ostream& o, const Acteur& acteur) {
     o << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
 }
@@ -425,6 +428,11 @@ int main()
     ofstream fichier("films.txt");
 
     fichier << filmEnString << listeFilms;
+
+    cout << ligneDeSeparation << "Trouver un film avec une fonction lambda pour indiquer le critère:" << endl;
+
+    int recette = 955;
+    cout << listeFilms.trouverFilm([x= recette](auto v){ return v->recette == x;});
 
     //TODO: Détruire tout avant de terminer le programme.
     // La bibliothèque de verification_allocation devrait afficher "Aucune fuite detectee."
