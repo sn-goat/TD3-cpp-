@@ -217,7 +217,13 @@ void ListeFilms::detruireListeFilms(ListeFilms& listeFilms) {
 }
 
 template<typename PredicatUniaire>
-    auto trouverFilm(const PredicatUniaire& critere);
+auto ListeFilms::trouverFilm(const PredicatUniaire& critere){
+    for(auto film : span(elements_, nElements_)){
+        if(critere(film)){
+            return film;
+        }
+    }
+}
 
 void afficherActeur(ostream& o, const Acteur& acteur) {
     o << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
