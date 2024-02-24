@@ -26,6 +26,9 @@ public:
     friend ostream& operator<< (ostream& o, const ListeFilms& listeFilms);
     void ajouterFilmListeFilms(ListeFilms& listeFilms, Film* film);
     void enleverFilmListeFilms(ListeFilms& listeFilms, Film* film);
+
+    template<typename PredicatUniaire>
+    auto trouverFilm(const PredicatUniaire& critere);
     //void afficherListeFilms(const ListeFilms& listeFilms) const;
     void detruireListeFilms(ListeFilms& listeFilms);
     void detruireFilm(Film* film, ListeFilms& listeFilms);
