@@ -60,12 +60,12 @@ public:
     int trouverCapacite() const;
     void reallocation(int nouvelleCapacite);
 
-//    shared_ptr<T>* trouverElements() const;
+    //    shared_ptr<T>* trouverElements() const;
 
 
-    //void definirCapcite(int capacite);
-    
-//    void creerListe();
+        //void definirCapcite(int capacite);
+
+    //    void creerListe();
     void ajouterElement(const shared_ptr<T>& element);
 
 
@@ -78,7 +78,7 @@ private:
 
 
 };
-
+using ListeActeurs = Liste<Acteur>;
 struct Acteur
 {
     string nom;
@@ -95,5 +95,5 @@ struct Film
 {
     string titre, realisateur; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
     int anneeSortie, recette; // Année de sortie et recette globale du film en millions de dollars
-    Liste<Acteur> acteurs;
+    ListeActeurs acteurs;
 };
