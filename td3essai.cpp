@@ -137,10 +137,10 @@ int ListeActeurs::trouverCapacite() const {
     return capacite_;
 }
 
-//template <typename T>
-//shared_ptr<T>* Liste<T>::trouverElements() const {
-//    return elements_.get();
-//}
+template <typename T>
+shared_ptr<T>* Liste<T>::trouverElements() const {
+    return elements_.get();
+}
 
 template <typename T>
 shared_ptr<T> Liste<T>::operator[](int index) {
@@ -435,13 +435,13 @@ int main()
 
     // 3. Changer le premier acteur du film skylien pour le premier acteur de listeFilms[1].
     Film secondFilm = *listeFilms.trouverElements()[1];
-    skylien.acteurs[0] = secondFilm.acteurs[0];
+    skylien.acteurs.trouverElements()[0] = secondFilm.acteurs.trouverElements()[0];
 
     // 4. Changer le nom du premier acteur de skylien pour "Daniel Wroughton Craig".
-    skylien.acteurs[0]->nom = "Daniel Wroughton Craig";
+    skylien.acteurs.trouverElements()[0]->nom = "Daniel Wroughton Craig";
 
     // 5. Afficher skylien, listeFilms[0] et listeFilms[1].
-    cout << ligneDeSeparation << "Affichage de skylien:" << endl;
+    cout << "Affichage de skylien:" << endl;
     cout << skylien;
 
     cout << "Affichage de listeFilms[0]:" << endl;
@@ -504,7 +504,7 @@ int main()
 
     Liste<string> listeTextes2 = listeTextes;
 
-    listeTextes[0] = stringPtr2;
+    listeTextes.trouverElements()[0] = stringPtr2;
 
 
     *listeTextes[1] = "Really dawg...";
