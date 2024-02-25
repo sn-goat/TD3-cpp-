@@ -20,8 +20,7 @@ public:
     Film** trouverElements() const;
     Film** trouverElements();
 
-    friend ostream& operator<< (ostream& o, const Film& film);
-    
+
     //void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur) const;
     friend ostream& operator<< (ostream& o, const ListeFilms& listeFilms);
     void ajouterFilmListeFilms(ListeFilms& listeFilms, Film* film);
@@ -41,34 +40,45 @@ private:
 
 };
 
-class ListeActeurs {
+template <typename T>
+class Liste {
 public:
-    ListeActeurs();
-    ListeActeurs(int capacite);
+    Liste();
+    Liste(int capacite);
 
-    ListeActeurs(const ListeActeurs& listeActeurs);
-    ListeActeurs& operator=(ListeActeurs&& listeActeurs);
 
-    ~ListeActeurs();
+    Liste(const Liste& liste);
+    Liste& operator=(const Liste& liste);
+    shared_ptr<T> operator[](int index);
+    const shared_ptr<T>& operator[](int index) const;
+
+
+
+    ~Liste();
 
     int trouverNElements() const;
     int trouverCapacite() const;
-    shared_ptr<Acteur>* trouverElements() const;
+    void reallocation(int nouvelleCapacite);
+
+//    shared_ptr<T>* trouverElements() const;
+
 
     //void definirCapcite(int capacite);
-    void creerListeActeurs();
-    void ajouterActeurListeActeur(shared_ptr<Acteur> acteur);
+    
+//    void creerListe();
+    void ajouterElement(const shared_ptr<T>& element);
 
 
 private:
     int capacite_ = 0;
     int nElements_ = 0;
-    unique_ptr<shared_ptr<Acteur>[]> elements_;
+    unique_ptr<shared_ptr<T>[]> elements_;
 
 
 
 
 };
+
 struct Acteur
 {
     string nom;
@@ -76,7 +86,7 @@ struct Acteur
     char sexe;
     //ListeFilms joueDans;
 };
-//struct ListeActeurs {
+//struct Liste {
 //    int capacite, nElements;
 //    Acteur** elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 //};
@@ -85,5 +95,5 @@ struct Film
 {
     string titre, realisateur; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
     int anneeSortie, recette; // Année de sortie et recette globale du film en millions de dollars
-    ListeActeurs acteurs;
+    Liste<Acteur> acteurs;
 };
