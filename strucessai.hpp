@@ -60,7 +60,7 @@ public:
     int trouverCapacite() const;
     void reallocation(int nouvelleCapacite);
 
-    //    shared_ptr<T>* trouverElements() const;
+    shared_ptr<T>* trouverElements() const;
 
 
         //void definirCapcite(int capacite);
