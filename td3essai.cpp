@@ -48,11 +48,11 @@ size_t lireUintTailleVariable(istream& fichier)
 {
     uint8_t entete = lireType<uint8_t>(fichier);
     switch (entete) {
-        case enteteTailleVariableDeBase + 0: return lireType<uint8_t>(fichier);
-        case enteteTailleVariableDeBase + 1: return lireType<uint16_t>(fichier);
-        case enteteTailleVariableDeBase + 2: return lireType<uint32_t>(fichier);
-        default:
-            erreurFataleAssert("Tentative de lire un entier de taille variable alors que le fichier contient autre chose à cet emplacement.");
+    case enteteTailleVariableDeBase + 0: return lireType<uint8_t>(fichier);
+    case enteteTailleVariableDeBase + 1: return lireType<uint16_t>(fichier);
+    case enteteTailleVariableDeBase + 2: return lireType<uint32_t>(fichier);
+    default:
+        erreurFataleAssert("Tentative de lire un entier de taille variable alors que le fichier contient autre chose à cet emplacement.");
     }
 }
 
@@ -68,9 +68,9 @@ string lireString(istream& fichier)
 
 
 ListeFilms::ListeFilms()
-        : capacite_(0),
-          nElements_(0),
-          elements_(nullptr) {}
+    : capacite_(0),
+    nElements_(0),
+    elements_(nullptr) {}
 
 
 ListeFilms::~ListeFilms() {
@@ -91,14 +91,14 @@ Liste<T>::~Liste() {
 
 template <typename T>
 Liste<T>::Liste()
-        : capacite_(0),
-          nElements_(0),
-          elements_(nullptr) {}
+    : capacite_(0),
+    nElements_(0),
+    elements_(nullptr) {}
 
 template <typename T>
 Liste<T>::Liste(const Liste<T>& liste)
-        : capacite_(liste.capacite_),
-          nElements_(liste.nElements_)
+    : capacite_(liste.capacite_),
+    nElements_(liste.nElements_)
 {
     elements_ = make_unique<shared_ptr<T>[]>(capacite_);
     for (int i : range(nElements_)) {
@@ -127,13 +127,13 @@ Liste<T>& Liste<T>::operator=(const Liste<T>& autre) {
 }
 
 
-template <typename T>
-int Liste<T>::trouverNElements() const {
+//template <typename T>
+int ListeActeurs::trouverNElements() const {
     return nElements_;
 }
 
-template <typename T>
-int Liste<T>::trouverCapacite() const {
+//template <typename T>
+int ListeActeurs::trouverCapacite() const {
     return capacite_;
 }
 
@@ -143,12 +143,12 @@ int Liste<T>::trouverCapacite() const {
 //}
 
 template <typename T>
-shared_ptr<T> Liste<T>::operator[](int index){
+shared_ptr<T> Liste<T>::operator[](int index) {
     return elements_.get()[index];
 }
 
 template <typename T>
-const shared_ptr<T>& Liste<T>::operator[](int index) const{
+const shared_ptr<T>& Liste<T>::operator[](int index) const {
     return elements_.get()[index];
 }
 
@@ -236,9 +236,9 @@ void ListeFilms::detruireListeFilms(ListeFilms& listeFilms) {
 }
 
 template<typename PredicatUniaire>
-auto ListeFilms::trouverFilm(const PredicatUniaire& critere){
-    for(auto film : span(elements_, nElements_)){
-        if(critere(film)){
+auto ListeFilms::trouverFilm(const PredicatUniaire& critere) {
+    for (auto film : span(elements_, nElements_)) {
+        if (critere(film)) {
             return film;
         }
     }
@@ -253,9 +253,9 @@ ostream& operator<< (ostream& o, const ListeFilms& listeFilms) {
     static const string ligneDeSeparation = "----------------------------------------\n";
     o << ligneDeSeparation;
     for (Film* film : span(listeFilms.elements_, listeFilms.nElements_)) {
-        o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette <<"M$"<< ", Acteurs: " << endl;
+        o << "  " << film->titre << ", Realise par " << film->realisateur << ", sorti en " << film->anneeSortie << ", recettes : " << film->recette << "M$" << ", Acteurs: " << endl;
         for (int i : range(film->acteurs.trouverNElements())) {
-            afficherActeur(o ,*film->acteurs[i]);
+            afficherActeur(o, *film->acteurs[i]);
         }
 
         o << ligneDeSeparation;
@@ -299,14 +299,14 @@ void Liste<T>::reallocation(int nouvelleCapacite) {
 
 
 template <typename T>
-void Liste<T>::ajouterElement(const shared_ptr<T> &element) {
-    if(nElements_ >= capacite_){
-       int nouvelleCapacite = (capacite_ == 0) ? 1 : capacite_ * 2;
+void Liste<T>::ajouterElement(const shared_ptr<T>& element) {
+    if (nElements_ >= capacite_) {
+        int nouvelleCapacite = (capacite_ == 0) ? 1 : capacite_ * 2;
 
         reallocation(nouvelleCapacite);
-    elements_[nElements_++] = element;
+        elements_[nElements_++] = element;
     }
-    else{
+    else {
         elements_[nElements_++] = element;
     }
 
@@ -327,7 +327,7 @@ ostream& operator<< (ostream& o, const Film* film) {
 
         afficherActeur(o, *film->acteurs[i]);
     }
-    o << ligneDeSeparation ;
+    o << ligneDeSeparation;
     return o;
 }
 ostream& operator<< (ostream& o, const Film& film) {
@@ -384,7 +384,7 @@ shared_ptr<Acteur> lireActeur(istream& fichier, const  ListeFilms& listeFilms) {
     if (acteurEstPtrNull) {
         cout << "Nom de l'acteur ajouté: " << acteur.nom << " " << acteur.anneeNaissance << '\n';
         shared_ptr<Acteur>acteurCree = make_unique<Acteur>(acteur);
-//        *acteurCree = acteur;
+        //        *acteurCree = acteur;
         return acteurCree;
     }
     else {
@@ -421,13 +421,13 @@ int main()
 
 
     cout << benedictCumberbatch->nom << " " << benedictCumberbatch->anneeNaissance << endl;
-//    cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
+    //    cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
 
-    //TODO: Afficher la liste des films où Benedict Cumberbatch joue.  Il devrait y avoir Le Hobbit et Le jeu de l'imitation.
+        //TODO: Afficher la liste des films où Benedict Cumberbatch joue.  Il devrait y avoir Le Hobbit et Le jeu de l'imitation.
 
-    //listeFilms.afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
-    //skylien
-    // 1. Film skylien = listeFilms[0]; ou Film skylien = *listeFilms[0]; selon ce qui fait du sens.
+        //listeFilms.afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
+        //skylien
+        // 1. Film skylien = listeFilms[0]; ou Film skylien = *listeFilms[0]; selon ce qui fait du sens.
     Film skylien = *listeFilms.trouverElements()[0]; // ou Film* skylien = *listeFilms.trouverElements();
 
     // 2. Changer le titre du film skylien pour "Skylien".
@@ -481,7 +481,7 @@ int main()
     cout << ligneDeSeparation << "Trouver un film avec une fonction lambda pour indiquer le critère:" << endl;
 
     int recette = 955;
-    cout << listeFilms.trouverFilm([x= recette](auto v){ return v->recette == x;});
+    cout << listeFilms.trouverFilm([x = recette](auto v) { return v->recette == x; });
 
     //TODO: Détruire tout avant de terminer le programme.
     // La bibliothèque de verification_allocation devrait afficher "Aucune fuite detectee."
